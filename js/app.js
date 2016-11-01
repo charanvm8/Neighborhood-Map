@@ -1,3 +1,5 @@
+// Storing locations values in an array
+
 var locations = [
     {
         name : 'Top golf',
@@ -27,6 +29,7 @@ var locations = [
 
 ];
 
+// Declaring Location Object
 
 var locationObj = function(data) {
     var self = this;
@@ -37,10 +40,16 @@ var locationObj = function(data) {
     this.city = "";
     this.visible = ko.observable(true);
 
+    // Storing FourSquare API credentials
+
     var fourSquareClientID= "PENG4VW3LZTMJB00Q5MD3ZVARKZDVJFK314TI4AZEJ1FYVUV";
     var fourSquareClientSecret= "PZMBYYJRGGVIZNZOWIIEBFQ0ZSUSUIJUGNW4XKFFEEMMRC11";
 
+    // Declaring url to retrive JSON from the API
+
     var url = 'https://api.foursquare.com/v2/venues/search?ll='+ this.lat + ',' + this.lon + '&client_id=' + fourSquareClientID + '&client_secret=' + fourSquareClientSecret + '&v=20160118' + '&query=' + this.name;
+
+    // Retrieving data from the JSON
 
     $.getJSON(url).done(function(data) {
         var results = data.response.venues[0];
@@ -50,11 +59,15 @@ var locationObj = function(data) {
         alert("Unable to load Foursquare API");
     });
 
+    // Initiating maker for the object
+
     this.marker = new google.maps.Marker({
             position: new google.maps.LatLng(data.lat, data.lon),
             map: map,
             title: self.name
     });
+
+    // Function to display marker according to the visibility
 
     this.showMarker = ko.computed(function() {
         if(self.visible() === true) {
@@ -65,11 +78,15 @@ var locationObj = function(data) {
         return true;
     }, self);
 
+    // Info Window is Initialized
+
     this.infoContent = '<div class="title"><b>' + self.name + "</b></div>" +
         '<div>' + self.street + "</div>" +
         '<div>' + self.city + "</div>";
 
     this.infoWindow = new google.maps.InfoWindow({content: self.infoContent});
+
+    // Marker Listener function
 
     this.marker.addListener('click', function(){
         self.infoContent = '<div class="title"><b>' + self.name + "</b></div>" +
@@ -86,27 +103,43 @@ var locationObj = function(data) {
         }, 750);
     });
 
+    // Bounce function is called
+
     this.bounce = function(place) {
         google.maps.event.trigger(self.marker, 'click');
     };
 };
 
+// Global variable is declared
+
 var map;
+
+// View Model function
 
 var ViewModel=function() {
     var self = this;
+
+    // LocationList of empty array is declared and later values are added
+
     this.locationList = ko.observableArray([]);
+
+    // Default position of the map is declared
 
     map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: {lat: 39.050, lng: -77.486}
     });
 
+    // Location objects are pushed into the array list
 
     locations.forEach(function(locationItem){
         self.locationList.push( new locationObj(locationItem));
     });
+
+    // Search for keyword to display results function is written
+
     this.searchTerm = ko.observable("");
+
     this.filteredList = ko.computed( function() {
         var filter = self.searchTerm().toLowerCase();
         if (!filter) {
@@ -124,13 +157,19 @@ var ViewModel=function() {
         }
     }, self);
 
-    this.mapElement = document.getElementById('map');
-    this.mapElement.style.height = window.innerHeight - 50;
+
+
+    this.mapEle = document.getElementById('map');
+    this.mapEle.style.height = window.innerHeight -50;
 }
+
+// calling init method
 
 var init=function() {
     ko.applyBindings(new ViewModel());
 }
+
+// Error handling for google maps
 
 function googleErrorHandling() {
     console.log("Failed to load Google Maps");
