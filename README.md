@@ -1,8 +1,8 @@
-Neighborhood-Map
+# Neighborhood-Map
 
 It is a single page application featuring a map of your neighborhood or a neighborhood you would like to visit.
 
-Getting Started :
+### Getting Started :
 
 Visit the site at - https://charanvm8.github.io/Neighborhood-Map/
 
