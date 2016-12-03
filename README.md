@@ -10,5 +10,5 @@ or
 
 running on your machine
 
-You need to clone or download from the repo and run the html on localhost or server.
+You need to clone or download from the repo and run the index.html on localhost or server.
 

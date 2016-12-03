@@ -31,13 +31,13 @@ var locations = [
 
 // Declaring Location Object
 
-var locationObj = function(data) {
+var LocationObj = function(data) {
     var self = this;
     this.name = data.name;
     this.lat = data.lat;
     this.lon = data.lon;
-    this.street = "";
-    this.city = "";
+    this.street = "Searching ...";
+    this.city = "Searching ...";
     this.visible = ko.observable(true);
 
     // Storing FourSquare API credentials
@@ -133,7 +133,7 @@ var ViewModel=function() {
     // Location objects are pushed into the array list
 
     locations.forEach(function(locationItem){
-        self.locationList.push( new locationObj(locationItem));
+        self.locationList.push( new LocationObj(locationItem));
     });
 
     // Search for keyword to display results function is written
@@ -161,16 +161,16 @@ var ViewModel=function() {
 
     this.mapEle = document.getElementById('map');
     this.mapEle.style.height = window.innerHeight -50;
-}
+};
 
 // calling init method
 
 var init=function() {
     ko.applyBindings(new ViewModel());
-}
+};
 
 // Error handling for google maps
 
 function googleErrorHandling() {
-    console.log("Failed to load Google Maps");
+    alert("Failed to load Google Maps");
 }
